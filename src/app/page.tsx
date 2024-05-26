@@ -4,6 +4,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
+      <noscript>You need to enable JavaScript to run this app.</noscript>
       <Grid
         container
         direction="row"
@@ -24,8 +25,9 @@ export default function Home() {
               suo lavoro sulla decomposizione di funzioni periodiche in una
               somma di funzioni sinusoidali o cosinusoidali, nota come Serie di
               Fourier. Fourier ha fornito le basi teoriche per la Serie di
-              Fourier, che è diventata uno strumento essenziale nell&apos;analisi
-              delle funzioni periodiche e nel campo della matematica applicata.
+              Fourier, che è diventata uno strumento essenziale
+              nell&apos;analisi delle funzioni periodiche e nel campo della
+              matematica applicata.
             </Typography>
             <ButtonGroup aria-label="Action buttons" size="small">
               <Button variant="contained" href="/lab">

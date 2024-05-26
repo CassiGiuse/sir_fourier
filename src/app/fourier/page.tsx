@@ -6,7 +6,7 @@ export default function FourierPage() {
   return (
     <React.Fragment>
       <Box component={"section"} width={"92%"}>
-        <Typography
+        {/* <Typography
           paragraph
           align="justify"
           sx={{ padding: "20px", lineHeight: 1.8 }}
@@ -33,8 +33,7 @@ export default function FourierPage() {
           Nesciunt reiciendis tempora rerum labore fuga qui suscipit quidem
           quisquam fugit. Dolores sapiente consequatur recusandae asperiores.
           Nihil obcaecati et eos sit totam vitae molestias temporibus.
-          f
-        </Typography>
+        </Typography> */}
       </Box>
     </React.Fragment>
   );
