@@ -87,7 +87,7 @@ class Vector {
     return this;
   }
 
-  public linkLineToOrdinateAxis(): Vector {
+  public showLinkLine(): Vector {
     if (this.ctx === null) {
       throw new Error(
         "linkLineToOrdinateAxis() method called before drawVector(). Make sure to draw the vector before linking lines."
@@ -108,7 +108,31 @@ class Vector {
     return this;
   }
 
-  public drawSineWave() {}
+  public showSineWave(): void {
+    if (this.ctx === null) {
+      throw new Error(
+        "drawSineWave() method called before drawVector(). Make sure to draw the vector before drawing the resulting sine wave."
+      );
+    }
+
+    this.ctx.save();
+    this.ctx.strokeStyle = this.vectorColor;
+    this.ctx.lineWidth = Vector.VECTOR_WIDTH;
+    this.ctx.beginPath();
+
+    for (let x = 0; x < this.latestYCoordinates.length; x++) {
+      this.ctx.lineTo(
+        this.ctx.canvas.width / 2 + x,
+        this.latestYCoordinates[this.latestYCoordinates.length - x]
+      );
+    }
+    if (this.latestYCoordinates.length > this.ctx.canvas.width) {
+      this.latestYCoordinates.splice(0, this.ctx.canvas.width / 2);
+    }
+
+    this.ctx.stroke();
+    this.ctx.restore();
+  }
 
   // GETTERS
 
@@ -150,6 +174,14 @@ class Vector {
 
   public setVectorColor(color: string): void {
     this.vectorColor = color;
+  }
+
+  public toString(): string {
+    return `+---- ${this.vectorName} -----\n| Colore: ${this.vectorColor};\n| Formula: y(t) = ${this.amp} * sin(${this.fq} * 2 * 3.14 * t + ${this.phi})\n+-----------------------------`;
+  }
+
+  public static vectorFormula(): string {
+    return `y(t) = amp * sin(2πf * t + φ)`;
   }
 }
 
