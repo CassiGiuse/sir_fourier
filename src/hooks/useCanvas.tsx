@@ -11,22 +11,6 @@ export default function useCanvas({ draw }: { draw: DrawFunction }) {
   Le funzioni in JavaScript sono riferimenti che vengono ricreati ogni volta che il componente viene renderizzato. 
   Questo significa che ogni volta che il componente Canvas viene renderizzato, viene creata una nuova istanza della funzione draw. 
   */
-  // function resizeCanvasToDisplaySize(canvas: HTMLCanvasElement) {
-  //   const parent: HTMLElement | null = canvas.parentElement;
-
-  //   if (!parent) return false;
-
-  //   const width = parent.clientWidth;
-  //   const height = parent.clientHeight;
-
-  //   if (canvas.width !== width || canvas.height !== height) {
-  //     canvas.width = width;
-  //     canvas.height = height;
-  //     return true;
-  //   }
-
-  //   return false;
-  // }
 
   useEffect(() => {
     // Otteniamo l'elemento canvas dal riferimento
@@ -42,9 +26,30 @@ export default function useCanvas({ draw }: { draw: DrawFunction }) {
     let frameCount: number = 0;
     let animationFrameId: number;
 
+    const preDraw = (ctx: CanvasRenderingContext2D) => {
+      ctx.save();
+
+      const parent: HTMLElement | null = canvas.parentElement;
+
+      if (parent === null) return;
+
+      const width = parent.clientWidth;
+      const height = parent.clientHeight;
+
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+    };
+
+    const postDraw = (ctx: CanvasRenderingContext2D) => {
+      ctx.restore();
+    };
+
     // Operiamo sulla canvas o sul contesto
     const render = () => {
       frameCount++;
+      preDraw(context);
       draw(context, frameCount);
       // il browser pianifica l'esecuzione di una funzione prima del prossimo repaint.
       // Questo è utile per creare animazioni fluide perché sincronizza l'animazione con il refresh rate del display.

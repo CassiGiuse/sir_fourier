@@ -14,5 +14,9 @@ export default function Canvas({ draw }: CanvasProps) {
   
   const canvasRef = useCanvas({ draw });
 
-  return <canvas ref={canvasRef} width={700} height={300}></canvas>;
+  return (
+    <canvas
+      ref={canvasRef}
+    ></canvas>
+  );
 }

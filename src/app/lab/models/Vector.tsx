@@ -1,4 +1,6 @@
 import Colors from "@/utils/Colors";
+import { convertBase } from "@/utils/Convertor";
+import { contextWrapper } from "@/utils/Drawable";
 
 interface VectorProperties {
   amplitude: number;
@@ -25,7 +27,7 @@ class Vector {
   private latestYCoordinates: Array<number>;
 
   private static globalVectorCounter: number = 0;
-  private static readonly VECTOR_WIDTH: number = 2;
+  private static readonly VECTOR_LINE_WIDTH: number = 2;
   private static readonly LINK_WIDTH: number = 1;
 
   constructor(
@@ -38,7 +40,7 @@ class Vector {
     // Must have
     this.amp = vectorProp.amplitude;
     this.fq = vectorProp.frequency;
-    this.phi = vectorProp.phi;
+    this.phi = (vectorProp.phi * Math.PI) / 180;
     this.currentPolar = { polarX: 0, polarY: 0 };
     this.latestYCoordinates = [];
     this.ctx = null;
@@ -61,20 +63,23 @@ class Vector {
     }
   ): Vector {
     this.ctx = ctx;
-    ctx.save();
-    ctx.strokeStyle = this.vectorColor;
-    ctx.lineWidth = Vector.VECTOR_WIDTH;
-    ctx.beginPath();
 
     const vectorPhase = this.fq * 2 * Math.PI * time + this.phi;
     const polarX = this.amp * Math.cos(vectorPhase);
     const polarY = this.amp * Math.sin(vectorPhase);
 
-    ctx.moveTo(vectorPosition.x, vectorPosition.y);
-    ctx.lineTo(polarX + vectorPosition.x, polarY + vectorPosition.y);
-
-    ctx.stroke();
-    ctx.restore();
+    contextWrapper(
+      this.ctx,
+      {
+        strokeStyle: this.vectorColor,
+        lineWidth: Vector.VECTOR_LINE_WIDTH,
+      },
+      () => {
+        ctx.beginPath();
+        ctx.moveTo(vectorPosition.x, vectorPosition.y);
+        ctx.lineTo(polarX + vectorPosition.x, polarY + vectorPosition.y);
+      }
+    );
 
     this.currentPolar = {
       polarX: polarX + vectorPosition.x,
@@ -94,16 +99,19 @@ class Vector {
       );
     }
 
-    this.ctx.save();
-    this.ctx.strokeStyle = this.vectorColor + "a1";
-    this.ctx.lineWidth = Vector.LINK_WIDTH;
-    this.ctx.beginPath();
+    contextWrapper(
+      this.ctx,
+      {
+        strokeStyle: this.vectorColor + convertBase(50, 16),
+        lineWidth: Vector.LINK_WIDTH,
+      },
+      (ctx: CanvasRenderingContext2D) => {
+        ctx.beginPath();
 
-    this.ctx.moveTo(this.currentPolar.polarX, this.currentPolar.polarY);
-    this.ctx.lineTo(this.ctx.canvas.width / 2, this.currentPolar.polarY);
-
-    this.ctx.stroke();
-    this.ctx.restore();
+        ctx.moveTo(this.currentPolar.polarX, this.currentPolar.polarY);
+        ctx.lineTo(ctx.canvas.width / 2, this.currentPolar.polarY);
+      }
+    );
 
     return this;
   }
@@ -115,23 +123,26 @@ class Vector {
       );
     }
 
-    this.ctx.save();
-    this.ctx.strokeStyle = this.vectorColor;
-    this.ctx.lineWidth = Vector.VECTOR_WIDTH;
-    this.ctx.beginPath();
+    contextWrapper(
+      this.ctx,
+      {
+        strokeStyle: this.vectorColor,
+        lineWidth: Vector.VECTOR_LINE_WIDTH,
+      },
+      (ctx: CanvasRenderingContext2D) => {
+        ctx.beginPath();
 
-    for (let x = 0; x < this.latestYCoordinates.length; x++) {
-      this.ctx.lineTo(
-        this.ctx.canvas.width / 2 + x,
-        this.latestYCoordinates[this.latestYCoordinates.length - x]
-      );
-    }
-    if (this.latestYCoordinates.length > this.ctx.canvas.width) {
-      this.latestYCoordinates.splice(0, this.ctx.canvas.width / 2);
-    }
-
-    this.ctx.stroke();
-    this.ctx.restore();
+        for (let x = 0; x < this.latestYCoordinates.length; x++) {
+          ctx.lineTo(
+            ctx.canvas.width / 2 + x,
+            this.latestYCoordinates[this.latestYCoordinates.length - x]
+          );
+        }
+        if (this.latestYCoordinates.length > ctx.canvas.width) {
+          this.latestYCoordinates.splice(0, ctx.canvas.width / 2);
+        }
+      }
+    );
   }
 
   // GETTERS

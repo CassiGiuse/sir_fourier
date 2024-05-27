@@ -1,5 +1,6 @@
 import Navbar from "../shared/Navbar";
 import AppThemeProvider from "../layouts/ThemeManager";
+import "./globals.css"
 
 export const metadata = {
   title: "Sir. Fourirer",
