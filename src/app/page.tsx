@@ -18,6 +18,7 @@ export default function Home() {
         >
           <Box sx={{ margin: "10px", padding: "10px 20px" }}>
             <Typography variant="h3" sx={{ marginBottom: "5px" }}>
+              <a id="back-to-top"></a>
               Sir. Fourier
             </Typography>
             <Typography paragraph align="left">

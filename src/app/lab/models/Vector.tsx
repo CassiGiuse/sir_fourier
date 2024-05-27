@@ -1,6 +1,7 @@
 import Colors from "@/utils/Colors";
 import { convertBase } from "@/utils/Convertor";
 import { contextWrapper } from "@/utils/Drawable";
+import chroma from "chroma-js";
 
 interface VectorProperties {
   amplitude: number;
@@ -75,7 +76,6 @@ class Vector {
         lineWidth: Vector.VECTOR_LINE_WIDTH,
       },
       () => {
-        ctx.beginPath();
         ctx.moveTo(vectorPosition.x, vectorPosition.y);
         ctx.lineTo(polarX + vectorPosition.x, polarY + vectorPosition.y);
       }
@@ -92,6 +92,20 @@ class Vector {
     return this;
   }
 
+  public showSupportLine(len: number, ctx: CanvasRenderingContext2D): void {
+    contextWrapper(
+      ctx,
+      {
+        lineWidth: 1,
+        strokeStyle: chroma("white").hex(),
+      },
+      () => {
+        ctx.moveTo(ctx.canvas.width / 4 - len / 2, ctx.canvas.height / 2);
+        ctx.lineTo(ctx.canvas.width / 4 + len / 2, ctx.canvas.height / 2);
+      }
+    );
+  }
+
   public showLinkLine(): Vector {
     if (this.ctx === null) {
       throw new Error(
@@ -106,8 +120,6 @@ class Vector {
         lineWidth: Vector.LINK_WIDTH,
       },
       (ctx: CanvasRenderingContext2D) => {
-        ctx.beginPath();
-
         ctx.moveTo(this.currentPolar.polarX, this.currentPolar.polarY);
         ctx.lineTo(ctx.canvas.width / 2, this.currentPolar.polarY);
       }
@@ -130,8 +142,6 @@ class Vector {
         lineWidth: Vector.VECTOR_LINE_WIDTH,
       },
       (ctx: CanvasRenderingContext2D) => {
-        ctx.beginPath();
-
         for (let x = 0; x < this.latestYCoordinates.length; x++) {
           ctx.lineTo(
             ctx.canvas.width / 2 + x,
@@ -141,6 +151,53 @@ class Vector {
         if (this.latestYCoordinates.length > ctx.canvas.width) {
           this.latestYCoordinates.splice(0, ctx.canvas.width / 2);
         }
+      }
+    );
+  }
+
+  public drawSineWave(
+    ctx: CanvasRenderingContext2D,
+    time: number,
+    startPosition: {
+      x: number;
+      y: number;
+    } = {
+      x: 0,
+      y: 0,
+    }
+  ): void {
+    contextWrapper(
+      ctx,
+      {
+        lineWidth: Vector.VECTOR_LINE_WIDTH,
+        strokeStyle: this.vectorColor,
+      },
+      () => {
+        for (let x = 0; x < ctx.canvas.width; x++) {
+          const vectorPhase = this.fq * 2 * Math.PI * (x + time) + this.phi;
+          const polarY = this.amp * Math.sin(vectorPhase);
+          ctx.lineTo(startPosition.x + x, startPosition.y + polarY);
+        }
+      }
+    );
+  }
+
+  public static drawAxxes(ctx: CanvasRenderingContext2D): void {
+    const canvasWidth = ctx.canvas.width;
+    const canvasHeight = ctx.canvas.height;
+
+    contextWrapper(
+      ctx,
+      {
+        lineWidth: 1,
+        strokeStyle: chroma("white").hex() + convertBase(50, 16),
+      },
+      () => {
+        ctx.moveTo(canvasWidth / 2, 0);
+        ctx.lineTo(canvasWidth / 2, canvasHeight);
+
+        ctx.moveTo(0, canvasHeight / 2);
+        ctx.lineTo(canvasWidth, canvasHeight / 2);
       }
     );
   }

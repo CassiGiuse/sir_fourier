@@ -1,64 +1,34 @@
 "use client";
 
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Canvas from "./components/Canvas";
 import Vector from "./models/Vector";
 import { Typography, Box } from "@mui/material";
-import { contextWrapper } from "@/utils/Drawable";
-import chroma from "chroma-js";
-import { convertBase } from "@/utils/Convertor";
+import Fab from "@mui/material/Fab";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { AnimatePresence } from "framer-motion";
+import FloatingMenu from "./components/FloatingMenu";
 
 export default function LabPage() {
   // Manteniamo lo stesso riferimento tra i render con useMemo
-  const customVector = useMemo<Vector>(
-    () =>
-      new Vector({
-        amplitude: 90,
-        frequency: 0.0019,
-        phi: 0,
-        vectorColor: chroma.random().hex(),
-      }),
-    []
-  );
-
-  /*
-  test:
-  {
-    amplitude: 150,
-    frequency: 0.009,
-    phi: 90,
-    vectorColor: chroma("red").hex(),
-  }
-  */
+  const customVector = useMemo<Vector>(() => new Vector(), []);
+  const [menuOnView, setMenuView] = useState(false);
+  const MemoizedFloatingMenu = React.memo(FloatingMenu);
 
   // Utilizziamo useCallback per memorizzare la funzione draw
   const draw = useCallback(
     (ctx: CanvasRenderingContext2D, time: number) => {
       time = -time; // anti orario
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // pulisce canvas
+      const canvasWidth = ctx.canvas.width;
+      const canvasHeight = ctx.canvas.height;
 
-      contextWrapper(
-        ctx,
-        {
-          lineWidth: 1,
-          strokeStyle: chroma("white").hex() + convertBase(50, 16),
-        },
-        () => {
-          const canvasWidth = ctx.canvas.width;
-          const canvasHeight = ctx.canvas.height;
-
-          ctx.moveTo(canvasWidth / 2, 0);
-          ctx.lineTo(canvasWidth / 2, canvasHeight);
-
-          ctx.moveTo(0, canvasHeight / 2);
-          ctx.lineTo(canvasWidth, canvasHeight / 2);
-        }
-      );
+      Vector.drawAxxes(ctx);
 
       customVector
         .drawVector(ctx, time, {
-          x: ctx.canvas.width / 4,
-          y: ctx.canvas.height / 2,
+          x: canvasWidth / 4,
+          y: canvasHeight / 2,
         })
         .showLinkLine()
         .showSineWave();
@@ -68,19 +38,46 @@ export default function LabPage() {
 
   const boxStyle = {
     width: "80%",
-    height: "100%",
+    minHeight: "80dvh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
+  };
+
+  const fabStyle = {
+    position: "absolute",
+    zIndex: 999,
+    bottom: 0,
+    right: 0,
+    margin: "20px",
   };
 
   return (
     <React.Fragment>
+      <a id="back-to-top"></a>
       <Typography variant="h4" sx={{ marginBottom: "5px" }}>
         Vettori!
       </Typography>
       <Box component={"div"} sx={boxStyle}>
         <Canvas draw={draw}></Canvas>
+        <Fab
+          color="primary"
+          aria-label="open settings"
+          sx={fabStyle}
+          onClick={() => {
+            setMenuView((prev) => !prev);
+          }}
+        >
+          <SettingsIcon />
+        </Fab>
+        <AnimatePresence>
+          {menuOnView && (
+            <MemoizedFloatingMenu>
+              <h1>Ciao!</h1>
+            </MemoizedFloatingMenu>
+          )}
+        </AnimatePresence>
       </Box>
     </React.Fragment>
   );

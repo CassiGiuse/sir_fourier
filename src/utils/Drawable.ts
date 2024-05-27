@@ -17,6 +17,8 @@ function contextWrapper(
     }
   }
 
+  ctx.beginPath();
+
   callback(ctx);
 
   ctx.stroke();

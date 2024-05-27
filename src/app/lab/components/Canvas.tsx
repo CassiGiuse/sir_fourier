@@ -11,12 +11,7 @@ interface CanvasProps {
 }
 
 export default function Canvas({ draw }: CanvasProps) {
-  
   const canvasRef = useCanvas({ draw });
 
-  return (
-    <canvas
-      ref={canvasRef}
-    ></canvas>
-  );
+  return <canvas ref={canvasRef}></canvas>;
 }
