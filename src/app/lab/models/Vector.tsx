@@ -28,7 +28,7 @@ class Vector {
   private latestYCoordinates: Array<number>;
 
   private static globalVectorCounter: number = 0;
-  private static readonly VECTOR_LINE_WIDTH: number = 2;
+  private static readonly VECTOR_LINE_WIDTH: number = 3;
   private static readonly LINK_WIDTH: number = 1;
 
   constructor(
@@ -202,13 +202,17 @@ class Vector {
     );
   }
 
+  public resetVector(): void {
+    this.latestYCoordinates = [];
+  }
+
   // GETTERS
 
   public getVectorInfo(): VectorProperties {
     return {
-      amplitude: this.amp,
+      amplitude: Number(this.amp.toFixed(2)),
       frequency: this.fq,
-      phi: this.phi,
+      phi: Number(this.phi.toFixed(2)),
       vectorColor: this.vectorColor,
       vectorName: this.vectorName,
     };
@@ -245,7 +249,9 @@ class Vector {
   }
 
   public toString(): string {
-    return `y(t) = ${this.amp} * sin(${this.fq} * 2 * 3.14 * t + ${this.phi})`;
+    return `y(t) = ${this.amp.toFixed(2)} * sin(${this.fq.toFixed(
+      2
+    )} * 2 * 3.14 * t + ${this.phi.toFixed(2)})`;
   }
 
   public static vectorFormula(): string {

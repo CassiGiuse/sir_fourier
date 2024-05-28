@@ -2,12 +2,13 @@ import React from "react";
 import Stack from "@mui/material/Stack";
 import VectorList from "./VectorList";
 import Vector from "../models/Vector";
+import VectorManager from "./VectorManager";
 
 interface VectorListProps {
   items: Array<Vector>;
 }
 
-export default function VectorsPlayground({items}: VectorListProps) {
+export default function VectorsPlayground({ items }: VectorListProps) {
   return (
     <div className="size-ful">
       <Stack
@@ -17,6 +18,7 @@ export default function VectorsPlayground({items}: VectorListProps) {
         flexWrap="wrap"
       >
         <VectorList items={items}></VectorList>
+        <VectorManager></VectorManager>
       </Stack>
     </div>
   );
