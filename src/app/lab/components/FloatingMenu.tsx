@@ -13,7 +13,7 @@ function FloatingMenu({ children }: FloatingMenuProps) {
       animate={{ left: 0 }}
       exit={{ left: "-100%" }}
     >
-      {children}
+      <div className="wrapper size-full">{children}</div>
     </motion.div>
   );
 }

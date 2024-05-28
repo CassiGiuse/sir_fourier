@@ -2,7 +2,9 @@
 const config = {
   plugins: {
     tailwindcss: {},
+    "tailwind-scrollbar": {},
+    autoprefixer: {},
   },
 };
 
-export default config;
+module.exports = config;

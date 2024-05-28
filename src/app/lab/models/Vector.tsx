@@ -245,7 +245,7 @@ class Vector {
   }
 
   public toString(): string {
-    return `+---- ${this.vectorName} -----\n| Colore: ${this.vectorColor};\n| Formula: y(t) = ${this.amp} * sin(${this.fq} * 2 * 3.14 * t + ${this.phi})\n+-----------------------------`;
+    return `y(t) = ${this.amp} * sin(${this.fq} * 2 * 3.14 * t + ${this.phi})`;
   }
 
   public static vectorFormula(): string {
