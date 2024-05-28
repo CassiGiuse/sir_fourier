@@ -13,7 +13,7 @@ function FloatingMenu({ children }: FloatingMenuProps) {
       animate={{ left: 0 }}
       exit={{ left: "-200%" }}
     >
-      <div className="wrapper size-full">{children}</div>
+      <div className="size-full overflow-y-auto p-4">{children}</div>
     </motion.div>
   );
 }

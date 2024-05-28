@@ -43,20 +43,11 @@
           Vettori!
         </Typography>
         <CanvasManager draw={draw}>
-          <MemoizedVectorsPlayground items={vectors}></MemoizedVectorsPlayground>
+          <MemoizedVectorsPlayground
+            items={vectors}
+            hItems={setVectors}
+          ></MemoizedVectorsPlayground>
         </CanvasManager>
-        {/* <button
-          onClick={() => {
-            setVectors((prevVectors) => [...prevVectors, new Vector({
-              amplitude: Math.random() * 100,
-              frequency: 0.005,
-              phi: Math.random() * 100,
-            })]);
-            vectors.forEach((v) => v.resetVector())
-          }}
-        >
-          Clicca
-        </button> */}
       </React.Fragment>
     );
   }

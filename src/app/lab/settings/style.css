@@ -1,0 +1,10 @@
+.vectorManager_input {
+  @apply rounded-lg text-black p-1;
+
+}
+
+.vectorManager_input::-webkit-outer-spin-button,
+.vectorManager_input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

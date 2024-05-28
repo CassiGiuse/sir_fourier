@@ -14,7 +14,7 @@ export default function VectorUI({ vector }: { vector: Vector }) {
       }}
     >
       <Typography
-        variant="h5"
+        variant="h4"
         sx={{
           fontWeight: "bold",
           color: vectorInfo.vectorColor,
@@ -24,7 +24,7 @@ export default function VectorUI({ vector }: { vector: Vector }) {
         {vectorInfo.vectorName}
       </Typography>
       <div className="full-size display col item-left">
-        <Typography paragraph align="left">
+        <Typography paragraph align="left" sx={{ margin: 0 }}>
           Ym:{" "}
           <span
             style={{
@@ -34,7 +34,7 @@ export default function VectorUI({ vector }: { vector: Vector }) {
             {vectorInfo.amplitude}
           </span>
         </Typography>
-        <Typography paragraph align="left">
+        <Typography paragraph align="left" sx={{ margin: 0 }}>
           ƒ:{" "}
           <span
             style={{
@@ -43,9 +43,9 @@ export default function VectorUI({ vector }: { vector: Vector }) {
           >
             {vectorInfo.frequency}
           </span>{" "}
-          Hz?
+          Hz
         </Typography>
-        <Typography paragraph align="left">
+        <Typography paragraph align="left" sx={{ margin: 0 }}>
           φ:{" "}
           <span
             style={{
@@ -56,7 +56,7 @@ export default function VectorUI({ vector }: { vector: Vector }) {
           </span>{" "}
           rad
         </Typography>
-        <Typography paragraph align="left">
+        <Typography paragraph align="left" sx={{ margin: 0 }}>
           <span
             style={{
               fontSize: "1.2em",

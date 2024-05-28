@@ -8,7 +8,7 @@ interface VectorListProps {
 
 export default function VectorList({ items }: VectorListProps) {
   return (
-    <div className="border-gray-200 border-2 p-2 rounded w-full flex gap-2 overflow-x-scroll scrollbar scrollbar-thumb-slate-300">
+    <div className="border-gray-200 border-b-2 p-2 rounded w-full flex gap-2 overflow-x-scroll scrollbar scrollbar-thumb-slate-300">
       {items.map((item: Vector, index) => (
         <VectorUI key={index} vector={item}></VectorUI>
       ))}
