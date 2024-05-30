@@ -19,7 +19,7 @@ export default function VectorsPlayground({ items, hItems }: VectorListProps) {
       useFlexGap
       flexWrap="wrap"
     >
-      <VectorList items={items}></VectorList>
+      <VectorList items={items} hItems={hItems}></VectorList>
       <VectorManager hItems={hItems}></VectorManager>
     </Stack>
   );

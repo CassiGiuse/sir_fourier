@@ -2,8 +2,20 @@ import React, { useContext, useState, useEffect } from "react";
 import Vector from "../models/Vector";
 import { Typography } from "@mui/material";
 import VectorContext from "../data_context/VectorContext";
+import { motion } from "framer-motion";
+import { Button, ButtonGroup } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { AutoFixHigh as ModifyIcon } from "@mui/icons-material";
 
-export default function VectorUI({ vector }: { vector: Vector }) {
+type SetVectorsFunction = React.Dispatch<React.SetStateAction<Array<Vector>>>;
+
+export default function VectorUI({
+  vector,
+  hItems,
+}: {
+  vector: Vector;
+  hItems: SetVectorsFunction;
+}) {
   const context = useContext(VectorContext);
 
   if (context === undefined) {
@@ -23,7 +35,7 @@ export default function VectorUI({ vector }: { vector: Vector }) {
   }, [modified, currentVector, vector]);
 
   return (
-    <div
+    <motion.div
       className="drop-shadow-lg p-4 rounded-lg inline-block"
       style={{
         backgroundColor: "#141414",
@@ -58,7 +70,7 @@ export default function VectorUI({ vector }: { vector: Vector }) {
               fontSize: "1.2em",
             }}
           >
-            {vectorInfo.frequency}
+            {vectorInfo.frequency.toFixed(5)}
           </span>{" "}
           Hz
         </Typography>
@@ -82,14 +94,25 @@ export default function VectorUI({ vector }: { vector: Vector }) {
             {vector.toString()}
           </span>
         </Typography>
-        <button
-          onClick={() => {
-            setCurrentVector(vector);
-          }}
-        >
-          Modifica
-        </button>
+        <div className="w-full mt-2 flex justify-center items-center">
+          <ButtonGroup variant="outlined" aria-label="Basic button group">
+            <Button
+              onClick={() => {
+                setCurrentVector(vector);
+              }}
+            >
+              <ModifyIcon></ModifyIcon>
+            </Button>
+            <Button
+              onClick={() => {
+                hItems((prev) => prev.filter((el) => el !== vector));
+              }}
+            >
+              <DeleteIcon></DeleteIcon>
+            </Button>
+          </ButtonGroup>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

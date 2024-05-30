@@ -1,5 +1,5 @@
 import Colors from "@/utils/Colors";
-import { convertBase } from "@/utils/Convertor";
+import { convertBase, fromDegToRad, fromRadToDeg } from "@/utils/Convertor";
 import { contextWrapper } from "@/utils/Drawable";
 import chroma from "chroma-js";
 
@@ -49,7 +49,7 @@ class Vector {
     // Must have
     this.amp = vectorProp.amplitude;
     this.fq = vectorProp.frequency;
-    this.phi = (vectorProp.phi * Math.PI) / 180;
+    this.phi = fromDegToRad(vectorProp.phi);
     this.currentPolar = { polarX: 0, polarY: 0 };
     this.latestYCoordinates = [];
     this.ctx = null;
@@ -68,7 +68,7 @@ class Vector {
     this.setVectorName(info.vectorName);
     this.setAmplitude(Number(info.amplitude));
     this.setFrequency(Number(info.frequency));
-    this.setInitialPhase(Number(info.phi));
+    this.setInitialPhase(fromDegToRad(Number(info.phi)));
   }
 
   public drawVector(
@@ -228,7 +228,7 @@ class Vector {
     return {
       amplitude: this.amp,
       frequency: this.fq,
-      phi: (this.phi * Math.PI) / 180,
+      phi: this.phi,
       vectorColor: this.vectorColor,
       vectorName: this.vectorName,
     };
@@ -258,7 +258,7 @@ class Vector {
     return {
       amplitude: this.getAmplitude().toString(),
       frequency: this.getFrequency().toString(),
-      phi: this.getInitialPhase().toString(),
+      phi: fromRadToDeg(this.phi).toFixed(3),
       vectorName: this.getVectorName(),
       vectorColor: this.getVectorColor(),
     };

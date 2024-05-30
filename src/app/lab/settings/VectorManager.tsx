@@ -173,12 +173,8 @@ export default function VectorManager({
       </Stack>
       <div className="w-full flex justify-center items-center mt-2">
         <ButtonGroup variant="text" aria-label="Gruppo bottoni">
-          <Button variant="outlined" onClick={handleAddVector}>
-            Aggiungi vettore
-          </Button>
-          <Button variant="outlined" onClick={modifyVector}>
-            Modifica Vettore
-          </Button>
+          <Button onClick={handleAddVector}>Aggiungi vettore</Button>
+          <Button onClick={modifyVector}>Modifica Vettore</Button>
         </ButtonGroup>
       </div>
     </form>
