@@ -1,9 +1,26 @@
-import React, { useMemo } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Vector from "../models/Vector";
 import { Typography } from "@mui/material";
+import VectorContext from "../data_context/VectorContext";
 
 export default function VectorUI({ vector }: { vector: Vector }) {
-  const vectorInfo = useMemo(() => vector.getVectorInfo(), [vector]);
+  const context = useContext(VectorContext);
+
+  if (context === undefined) {
+    throw new Error("VectorsPlayground must be used within a VectorProvider");
+  }
+
+  const { currentVector, setCurrentVector, modified } = context;
+
+  // const vectorInfo = useMemo(() => vector.getVectorInfo(), [vector]);
+  const [vectorInfo, setVectorInfo] = useState(vector.getVectorInfo());
+
+  useEffect(() => {
+    if (currentVector === null) return;
+    if (currentVector !== vector) return;
+
+    setVectorInfo(currentVector.getVectorInfo());
+  }, [modified, currentVector, vector]);
 
   return (
     <div
@@ -31,7 +48,7 @@ export default function VectorUI({ vector }: { vector: Vector }) {
               fontSize: "1.2em",
             }}
           >
-            {vectorInfo.amplitude}
+            {vectorInfo.amplitude.toFixed(2)}
           </span>
         </Typography>
         <Typography paragraph align="left" sx={{ margin: 0 }}>
@@ -52,7 +69,7 @@ export default function VectorUI({ vector }: { vector: Vector }) {
               fontSize: "1.2em",
             }}
           >
-            {vectorInfo.phi}
+            {vectorInfo.phi.toFixed(2)}
           </span>{" "}
           rad
         </Typography>
@@ -65,6 +82,13 @@ export default function VectorUI({ vector }: { vector: Vector }) {
             {vector.toString()}
           </span>
         </Typography>
+        <button
+          onClick={() => {
+            setCurrentVector(vector);
+          }}
+        >
+          Modifica
+        </button>
       </div>
     </div>
   );

@@ -16,6 +16,14 @@ interface VectorPolarCoordinates {
   polarY: number;
 }
 
+interface VectorString {
+  amplitude: string;
+  frequency: string;
+  phi: string;
+  vectorName: string;
+  vectorColor: string;
+}
+
 class Vector {
   // ATTRIBUTES
   private amp: number;
@@ -54,6 +62,14 @@ class Vector {
   }
 
   // METHODS
+
+  public modifyVector(info: VectorString) {
+    this.setVectorColor(info.vectorColor);
+    this.setVectorName(info.vectorName);
+    this.setAmplitude(Number(info.amplitude));
+    this.setFrequency(Number(info.frequency));
+    this.setInitialPhase(Number(info.phi));
+  }
 
   public drawVector(
     ctx: CanvasRenderingContext2D,
@@ -210,9 +226,9 @@ class Vector {
 
   public getVectorInfo(): VectorProperties {
     return {
-      amplitude: Number(this.amp.toFixed(2)),
+      amplitude: this.amp,
       frequency: this.fq,
-      phi: Number(this.phi.toFixed(2)),
+      phi: (this.phi * Math.PI) / 180,
       vectorColor: this.vectorColor,
       vectorName: this.vectorName,
     };
@@ -238,6 +254,16 @@ class Vector {
     return this.vectorName;
   }
 
+  getVectorInfoAsString(): VectorString {
+    return {
+      amplitude: this.getAmplitude().toString(),
+      frequency: this.getFrequency().toString(),
+      phi: this.getInitialPhase().toString(),
+      vectorName: this.getVectorName(),
+      vectorColor: this.getVectorColor(),
+    };
+  }
+
   // SETTERS
 
   public setVectorName(name: string): void {
@@ -246,6 +272,18 @@ class Vector {
 
   public setVectorColor(color: string): void {
     this.vectorColor = color;
+  }
+
+  public setAmplitude(v: number): void {
+    this.amp = v;
+  }
+
+  public setFrequency(v: number): void {
+    this.fq = v;
+  }
+
+  public setInitialPhase(v: number): void {
+    this.phi = v;
   }
 
   public toString(): string {

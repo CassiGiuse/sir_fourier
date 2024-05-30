@@ -1,9 +1,18 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext, isValidElement } from "react";
 import { Typography, Stack, Button, ButtonGroup } from "@mui/material";
 import "./style.css";
 import Vector from "../models/Vector";
+import VectorContext from "../data_context/VectorContext";
+
+interface VectorInfo {
+  amplitude: string;
+  frequency: string;
+  phi: string;
+  vectorName: string;
+  vectorColor: string;
+}
 
 type SetVectorsFunction = React.Dispatch<React.SetStateAction<Array<Vector>>>;
 
@@ -14,6 +23,20 @@ export default function VectorManager({
   hItems: SetVectorsFunction;
   vector?: Vector | null;
 }) {
+  const context = useContext(VectorContext);
+
+  if (context === undefined) {
+    throw new Error("VectorsPlayground must be used within a VectorProvider");
+  }
+
+  const { currentVector, setModified } = context;
+
+  useEffect(() => {
+    if (currentVector === null) return;
+
+    setVectorData(currentVector.getVectorInfoAsString());
+  }, [currentVector]);
+
   const [vectorData, setVectorData] = useState(
     vector === null
       ? {
@@ -23,14 +46,18 @@ export default function VectorManager({
           vectorName: "",
           vectorColor: "#000000",
         }
-      : {
-          amplitude: vector.getAmplitude().toString(),
-          frequency: vector.getFrequency().toString(),
-          phi: vector.getInitialPhase().toString(),
-          vectorName: vector.getVectorName(),
-          vectorColor: vector.getVectorColor(),
-        }
+      : vector.getVectorInfoAsString()
   );
+
+  const modifyVector = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+
+    if (currentVector === null) return;
+
+    currentVector.modifyVector(vectorData);
+
+    setModified((prev) => !prev);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,24 +75,13 @@ export default function VectorManager({
 
     if (vector !== null) return;
 
-    const {
-      amplitude,
-      frequency,
-      phi,
-      vectorName,
-      vectorColor,
-    }: {
-      amplitude: string;
-      frequency: string;
-      phi: string;
-      vectorName: string;
-      vectorColor: string;
-    } = vectorData;
+    const { amplitude, frequency, phi, vectorName, vectorColor }: VectorInfo =
+      vectorData;
 
     const newVectorData = {
-      amplitude: parseFloat(amplitude) || (Math.random() * 100),
-      frequency: parseFloat(frequency) || (Math.random() / 100),
-      phi: parseFloat(phi) || (Math.random() * 360),
+      amplitude: parseFloat(amplitude) || Math.random() * 100,
+      frequency: parseFloat(frequency) || Math.random() / 100,
+      phi: parseFloat(phi) || Math.random() * 360,
       vectorName,
       vectorColor,
     };
@@ -155,7 +171,16 @@ export default function VectorManager({
           </label>
         </div>
       </Stack>
-      <button onClick={handleAddVector}>Cliccami per aggiungere!</button>
+      <div className="w-full flex justify-center items-center mt-2">
+        <ButtonGroup variant="text" aria-label="Gruppo bottoni">
+          <Button variant="outlined" onClick={handleAddVector}>
+            Aggiungi vettore
+          </Button>
+          <Button variant="outlined" onClick={modifyVector}>
+            Modifica Vettore
+          </Button>
+        </ButtonGroup>
+      </div>
     </form>
   );
 }
