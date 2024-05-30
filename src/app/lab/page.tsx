@@ -12,16 +12,14 @@ export default function LabPage() {
   // Manteniamo lo stesso riferimento tra i render con useMemo
   const MemoizedVectorsPlayground = React.memo(VectorsPlayground);
 
-  const [vectors, setVectors] = useState<Array<Vector>>([]);
+  const [vectors, setVectors] = useState<Array<Vector>>([new Vector()]);
 
   const [series, setSeries] = useState<Array<FourierSeries>>([
     new FourierSeries({ numberHarmonics: 10 }),
   ]);
 
-  const [value, setValue] = useState<number>(10);
-
   // Utilizziamo useCallback per memorizzare la funzione draw
-  const draw = useCallback(
+  const drawVectorPlayground = useCallback(
     (ctx: CanvasRenderingContext2D, time: number) => {
       time = -time; // anti orario
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // pulisce canvas
@@ -39,6 +37,18 @@ export default function LabPage() {
           .showLinkLine()
           .showSineWave();
       });
+    },
+    [vectors]
+  );
+
+  const drawFourierPlayground = useCallback(
+    (ctx: CanvasRenderingContext2D, time: number) => {
+      time = -time;
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // pulisce canvas
+      const canvasWidth = ctx.canvas.width;
+      const canvasHeight = ctx.canvas.height;
+
+      Vector.drawAxxes(ctx);
 
       series.forEach((crrSeries) => {
         crrSeries.drawSeries(ctx, time, {
@@ -47,14 +57,8 @@ export default function LabPage() {
         });
       });
     },
-    [vectors, series]
+    [series]
   );
-
-  const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    const value = Array.isArray(newValue) ? newValue[0] : newValue;
-    setValue(value);
-    series[0].setHarmonicsNumber(value);
-  };
 
   return (
     <React.Fragment>
@@ -62,25 +66,19 @@ export default function LabPage() {
       <Typography variant="h4" sx={{ marginBottom: "5px" }}>
         Vettori!
       </Typography>
-      <Slider
-        aria-label="Numero di armoniche"
-        defaultValue={30}
-        valueLabelDisplay="auto"
-        shiftStep={30}
-        step={5}
-        marks
-        min={5}
-        max={110}
-        value={value}
-        onChange={handleSliderChange}
-      />{" "}
-      <CanvasManager draw={draw}>
+      <CanvasManager draw={drawVectorPlayground}>
         <VectorProvider>
           <MemoizedVectorsPlayground
             items={vectors}
             hItems={setVectors}
           ></MemoizedVectorsPlayground>
         </VectorProvider>
+      </CanvasManager>
+      <Typography variant="h4" sx={{ marginBottom: "5px", marginTop: "10px" }}>
+        Serie di Fourier!
+      </Typography>
+      <CanvasManager draw={drawFourierPlayground}>
+        <h1>Bella</h1>
       </CanvasManager>
     </React.Fragment>
   );
