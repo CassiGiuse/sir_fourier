@@ -1,4 +1,4 @@
-import Colors from "@/utils/Colors";
+import { randomColor } from "@/utils/Colors";
 import { convertBase, fromDegToRad, fromRadToDeg } from "@/utils/Convertor";
 import { contextWrapper } from "@/utils/Drawable";
 import chroma from "chroma-js";
@@ -56,7 +56,7 @@ class Vector {
 
     // Optionals
     this.vectorName = vectorProp.vectorName || `V${Vector.globalVectorCounter}`;
-    this.vectorColor = vectorProp.vectorColor || Colors.randomColor();
+    this.vectorColor = vectorProp.vectorColor || randomColor();
 
     Vector.globalVectorCounter++;
   }
@@ -223,6 +223,13 @@ class Vector {
   }
 
   // GETTERS
+
+  public getCurrentPolar(): {
+    polarY: number;
+    polarX: number;
+  } {
+    return this.currentPolar;
+  }
 
   public getVectorInfo(): VectorProperties {
     return {

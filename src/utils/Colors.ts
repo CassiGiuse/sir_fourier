@@ -1,10 +1,7 @@
+import chroma from "chroma-js";
 
-import chroma from 'chroma-js';
-
-class Colors {
-  public static randomColor(): string {
-    return chroma.random().hex();
-  }
+function randomColor(): string {
+  return chroma.random().hex();
 }
 
-export default Colors;
+export { randomColor };
