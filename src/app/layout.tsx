@@ -1,6 +1,7 @@
 import Navbar from "../shared/Navbar";
 import AppThemeProvider from "../layouts/ThemeManager";
-import "./globals.css"
+import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: "Sir. Fourirer",
@@ -48,6 +49,7 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <SpeedInsights />
         <AppThemeProvider>
           <Navbar
             navItems={[
