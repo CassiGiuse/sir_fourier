@@ -6,11 +6,14 @@ import { Typography, Slider } from "@mui/material";
 import CanvasManager from "./components/CanvasManager";
 import VectorsPlayground from "./settings/VectorsPlayground";
 import { VectorProvider } from "./data_context/VectorContext";
+import { SeriesProvider } from "./data_context/SeriesContext";
 import { FourierSeries } from "./models/FourierSeries";
+import SeriesPlayground from "./settings/SeriesPlayground";
 
 export default function LabPage() {
   // Manteniamo lo stesso riferimento tra i render con useMemo
   const MemoizedVectorsPlayground = React.memo(VectorsPlayground);
+  const MemoizedSeriesPlayground = React.memo(SeriesPlayground);
 
   const [vectors, setVectors] = useState<Array<Vector>>([new Vector()]);
 
@@ -78,7 +81,12 @@ export default function LabPage() {
         Serie di Fourier!
       </Typography>
       <CanvasManager draw={drawFourierPlayground}>
-        <h1>Bella</h1>
+        <SeriesProvider>
+          <MemoizedSeriesPlayground
+            items={series}
+            hItems={setSeries}
+          ></MemoizedSeriesPlayground>
+        </SeriesProvider>
       </CanvasManager>
     </React.Fragment>
   );

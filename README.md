@@ -21,7 +21,7 @@ Il sito è strutturato in più pagine:
 
 - **Home Page**: pagina di presentazione del sito con un breve sunto su Fourier
 
-- **About**: qui documento step by step il codice sorgente del sito e approfondisco con maggiore dettaglio lo sviluppo del sito (pagina attualmente _work in progess_)
+- **About**: qui documento step by step il codice sorgente del sito e approfondisco con maggiore dettaglio lo sviluppo del sito
 
 - **Lab**: questa è la pagina cuore del mio sito, qui si può generare nuovi vettori, modificarli, creare serie di fourier o visualizzarne alcune standard come l'onda quadra, l'onda a dente di sega o quella triangolare. Le animazioni vengono fatte attraverso l'utilizzo del componente `<Canvas />` che gestisce il componente html `<canvas></canvas>` e che accetta come parametro un callback che rappresenta la funzione `draw`, ovvero, quella funzione che viene chiamata ad ogni render per eseguire le varie animaizoni.
 
@@ -29,10 +29,10 @@ Il sito è strutturato in più pagine:
 
 ## Le risorse
 
-Come già specificato parte del progetto è ancora in corso ma il codice sorgente viene aggiornato in continuazione sulla piattaforma [GitHub](https://github.com/) nella mia repository [sir_fourier](https://github.com/CassiGiuse/sir_fourier).
+Il codice sorgente è disponibile sulla pattaforma [GitHub](https://github.com/) nella mia repository [sir_fourier](https://github.com/CassiGiuse/sir_fourier).
 Il sito è hostato sulla piattaforma [Vercel](https://vercel.com/) al link <https://sir-fourier.vercel.app/>.
 
-## Conclusi e valutazioni personali
+## Conclusioni e valutazioni personali
 
 Sono orgoglioso del progetto e del risultato che ne è venuto fouri.
 Seppur manca ancora molto prima di ritenermi del tutto soddisfatto, mi piace il codice che ho scritto in quanto è flessibile e scalabile: non ho dovuto ripetere codice perché i componeti, le classi e le funzioni create sono del tutto riutilizzabili in qualsiasi contesto.

@@ -2,6 +2,12 @@ import Vector from "./Vector";
 import { contextWrapper } from "@/utils/Drawable";
 import { randomColor } from "@/utils/Colors";
 
+interface SeriesInfo {
+  frequency: number;
+  seriesName: string;
+  seriesColor: string;
+  amplitude: number;
+}
 export class FourierSeries {
   private harmonics: Array<Vector>;
   private seriesName: string;
@@ -9,6 +15,12 @@ export class FourierSeries {
   private amp0: number;
   private f0: number;
   private static readonly SERIES_LINE_WIDTH: number = 2;
+  public static readonly ALLOWED_SERIES_NAMES: Array<string> = [
+    "quadrata",
+    "triangolare",
+    "dente di sega",
+    "sega",
+  ];
 
   constructor(info: {
     numberHarmonics: number;
@@ -21,7 +33,7 @@ export class FourierSeries {
     this.amp0 = info.initialAmplitude || 50;
     this.harmonics = [];
     this.seriesColor = info.seriesColor || randomColor();
-    this.seriesName = info.seriesName || "quadrata";
+    this.seriesName = info.seriesName || FourierSeries.ALLOWED_SERIES_NAMES[0];
 
     this.generateHarmonics(this.seriesName, info.numberHarmonics);
   }
@@ -78,5 +90,50 @@ export class FourierSeries {
   public setHarmonicsNumber(v: number): void {
     this.harmonics = [];
     this.generateHarmonics(this.seriesName, v);
+  }
+
+  // GETTERS
+
+  public getAmplitude(): number {
+    return this.amp0;
+  }
+
+  public getSeriesInfo(): SeriesInfo {
+    return {
+      amplitude: this.amp0,
+      frequency: this.f0,
+      seriesName: this.seriesName,
+      seriesColor: this.seriesColor,
+    };
+  }
+
+  // SETTERS
+
+  public setInitialFrequency(frequency: number): void {
+    this.f0 = frequency;
+  }
+
+  public setInitialAmplitude(amplitude: number): void {
+    this.amp0 = amplitude;
+  }
+
+  public setSeriesColor(color: string): void {
+    this.seriesColor = color;
+  }
+
+  public setSeriesName(name: string): void {
+    if (
+      FourierSeries.ALLOWED_SERIES_NAMES.filter((el) => el === name).length ===
+      1
+    ) {
+      this.seriesName = name;
+      return;
+    }
+
+    throw new Error(
+      `Invalid choice, please select one of this instead: ${FourierSeries.ALLOWED_SERIES_NAMES.join(
+        ","
+      )}`
+    );
   }
 }
