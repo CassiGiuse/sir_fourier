@@ -60,7 +60,7 @@ export default function SeriesUI({ item, hItems }: SeriesUI) {
               fontSize: "1.2em",
             }}
           >
-            {seriesInfo.amplitude}
+            {seriesInfo.initialAmplitude}
           </span>
         </Typography>
         <Typography paragraph align="left" sx={{ margin: 0 }}>
@@ -70,7 +70,7 @@ export default function SeriesUI({ item, hItems }: SeriesUI) {
               fontSize: "1.2em",
             }}
           >
-            {seriesInfo.frequency.toFixed(5)}
+            {seriesInfo.initialFrequency.toFixed(5)}
           </span>{" "}
           Hz
         </Typography>

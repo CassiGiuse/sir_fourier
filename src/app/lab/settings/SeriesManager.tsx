@@ -22,8 +22,6 @@ export default function SeriesManager({ hItems }: SeriesManagerProps) {
 
   const { currentSeries, setCurrentSeries, modified } = context;
 
-  const {values, setValues} = useState(currentSeries?.getSeriesInfo() || {});
-
   return (
     <AnimatePresence>
       {currentSeries === null ? (

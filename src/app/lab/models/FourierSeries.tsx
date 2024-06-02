@@ -3,10 +3,11 @@ import { contextWrapper } from "@/utils/Drawable";
 import { randomColor } from "@/utils/Colors";
 
 interface SeriesInfo {
-  frequency: number;
+  initialFrequency: number;
   seriesName: string;
   seriesColor: string;
-  amplitude: number;
+  initialAmplitude: number;
+  numberHarmonics: number;
 }
 export class FourierSeries {
   private harmonics: Array<Vector>;
@@ -19,7 +20,6 @@ export class FourierSeries {
     "quadrata",
     "triangolare",
     "dente di sega",
-    "sega",
   ];
 
   constructor(info: {
@@ -82,14 +82,38 @@ export class FourierSeries {
           this.harmonics.push(tempVector);
         }
         return;
+      case "triangolare":
+        for (let i = 0; i < len; i++) {
+          let n = i * 2 + 1;
+          let harmAmp =
+            (this.amp0 * 8) / (Math.pow(Math.PI, 2) * Math.pow(n, 2));
+          const tempVector: Vector = new Vector({
+            amplitude: harmAmp * (i % 2 === 0 ? 1 : -1),
+            frequency: this.f0 * n,
+            phi: 0,
+            vectorColor: this.seriesColor,
+            vectorName: `${this.seriesName}_arm${i}`,
+          });
+          this.harmonics.push(tempVector);
+        }
+        return;
+      case "dente di sega":
+        for (let i = 0; i < len; i++) {
+          let n = (i + 1) % 2 == 0 ? i + 1 : (i + 1) * -1;
+          let harmAmp = this.amp0 * (2 / (n * Math.PI));
+          const tempVector: Vector = new Vector({
+            amplitude: harmAmp,
+            frequency: this.f0 * n,
+            phi: 0,
+            vectorColor: this.seriesColor,
+            vectorName: `${this.seriesName}_arm${i}`,
+          });
+          this.harmonics.push(tempVector);
+        }
+        return;
       default:
         return;
     }
-  }
-
-  public setHarmonicsNumber(v: number): void {
-    this.harmonics = [];
-    this.generateHarmonics(this.seriesName, v);
   }
 
   // GETTERS
@@ -100,14 +124,28 @@ export class FourierSeries {
 
   public getSeriesInfo(): SeriesInfo {
     return {
-      amplitude: this.amp0,
-      frequency: this.f0,
+      numberHarmonics: this.harmonics.length,
+      initialAmplitude: this.amp0,
+      initialFrequency: this.f0,
       seriesName: this.seriesName,
       seriesColor: this.seriesColor,
     };
   }
 
+  public getFrequency(): number {
+    return this.f0;
+  }
+
+  public getNumberHarmonics(): number {
+    return this.harmonics.length;
+  }
+
   // SETTERS
+
+  public setHarmonicsNumber(v: number): void {
+    this.harmonics = [];
+    this.generateHarmonics(this.seriesName, v);
+  }
 
   public setInitialFrequency(frequency: number): void {
     this.f0 = frequency;
@@ -127,6 +165,7 @@ export class FourierSeries {
       1
     ) {
       this.seriesName = name;
+      this.generateHarmonics(name, this.harmonics.length);
       return;
     }
 
