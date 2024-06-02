@@ -1,6 +1,6 @@
 import Vector from "./Vector";
 import { contextWrapper } from "@/utils/Drawable";
-import { randomColor } from "@/utils/Colors";
+import chroma from "chroma-js";
 
 interface SeriesInfo {
   initialFrequency: number;
@@ -32,7 +32,7 @@ export class FourierSeries {
     this.f0 = info.initialFrequency || 0.005;
     this.amp0 = info.initialAmplitude || 50;
     this.harmonics = [];
-    this.seriesColor = info.seriesColor || randomColor();
+    this.seriesColor = info.seriesColor || chroma("red").hex();
     this.seriesName = info.seriesName || FourierSeries.ALLOWED_SERIES_NAMES[0];
 
     this.generateHarmonics(this.seriesName, info.numberHarmonics);
